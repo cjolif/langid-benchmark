@@ -3,7 +3,7 @@ from collections import defaultdict
 
 LANGS = ["en", "fr", "it", "de", "es"]
 
-STRONG_MARKERS = {
+STRONG_ACCENT_MARKERS = {
     "es": ["ñ", "¿", "¡", "ó", "¿", "á"],
     "de": ["ß", "ä", "ö", "ü"],
     "fr": ["ç", "œ", "è", "ê", "à", "û" ],
@@ -19,7 +19,7 @@ SUBSTRINGS = {
     "es": ["que", "ción", "mente", "para", "esta", "este"],
 }
 
-STOPWORDS = {
+STOP_WORDS = {
     "en": ["the", "and", "is", "of", "to"],
     "fr": ["le", "la", "les", "des", "est", "pour", "au", "avec", "et", "ou"],
     "it": ["il", "lo", "la", "che", "per", "del"],
@@ -34,8 +34,8 @@ def detect_language(text: str) -> str:
     text = normalize(text)
     scores = defaultdict(int)
 
-    # 1. Strong markers (very high confidence)
-    for lang, markers in STRONG_MARKERS.items():
+    # 1. Strong accent markers (very high confidence)
+    for lang, markers in STRONG_ACCENT_MARKERS.items():
         for m in markers:
             if m in text:
                 scores[lang] += 5
@@ -46,13 +46,13 @@ def detect_language(text: str) -> str:
             if p in text:
                 scores[lang] += 2
 
-    # 3. Stopwords
+    # 3. Stop_words
     tokens = text.split()
-    for lang, words in STOPWORDS.items():
+    for lang, words in STOP_WORDS.items():
         for w in words:
             scores[lang] += tokens.count(w)
 
-    # 4. Romance vs Germanic tie-breaker
+    # 4. We don't know
     if not scores:
         return "unknown"
 
