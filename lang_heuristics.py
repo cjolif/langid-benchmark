@@ -4,7 +4,7 @@ from collections import defaultdict
 LANGS = ["en", "fr", "it", "de", "es"]
 
 STRONG_ACCENT_MARKERS = {
-    "es": ["ñ", "¿", "¡", "ó", "¿", "á"],
+    "es": ["ñ", "¿", "¡", "ó", "á"],
     "de": ["ß", "ä", "ö", "ü"],
     "fr": ["ç", "œ", "è", "ê", "à", "û" ],
     "it": [],
