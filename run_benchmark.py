@@ -22,8 +22,9 @@ logger.addHandler(stdout_handler)
 
 from benchmark_langid import BenchmarkLangid
 from benchmark_fasttext import BenchmarkFasttext
-from benchmark_cld3 import BenchmarkCLD3
-from benchmark_cld2 import BenchmarkCLD2
+#from benchmark_cld3 import BenchmarkCLD3
+#from benchmark_cld2 import BenchmarkCLD2
+from benchmark_heuristic import BenchmarkHeuristic
 ### ADD YOUR IMPLEMENTATIONS HERE ###
 
 
@@ -38,6 +39,7 @@ if __name__ == '__main__':
     parser.add_argument('-al', nargs='+', default=["*"], help="""
                             You can pass one or more of the supported algorithms:
                             Langid,
+                            heuristic,
                             Fasttext,
                             CLD2,
                             CLD3      
@@ -51,6 +53,9 @@ if __name__ == '__main__':
     if "Langid" in algorithm_list or "*" in algorithm_list:
         benchmark_langid = BenchmarkLangid()
         summary_df_list.extend(benchmark_langid())
+    if "heuristic" in algorithm_list or "*" in algorithm_list:
+        benchmark_heuristic = BenchmarkHeuristic()
+        summary_df_list.extend(benchmark_heuristic())
     if "Fasttext" in algorithm_list or "*" in algorithm_list:
         benchmark_fasttext = BenchmarkFasttext()
         summary_df_list.extend(benchmark_fasttext())

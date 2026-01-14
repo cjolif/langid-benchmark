@@ -1,5 +1,5 @@
 fasttext
-gcld3
+#gcld3
 mdtable
 pandas
 psutil

@@ -7,6 +7,7 @@ import numpy as np
 import sys
 import pandas as pd 
 from language_dictionary import lang_dict
+from lang_heuristics import detect_language
 from tqdm.auto import tqdm
 pd.set_option("max_colwidth", None)
 tqdm.pandas()
@@ -18,41 +19,42 @@ logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s')
 
 
-class BenchmarkLangid():
+class BenchmarkHeuristic():
 
       def __init__(self):
            """ dummy run to load the model and get memory usage """
            p = psutil.Process(os.getpid())
            mem_before = p.memory_info().rss
-           langid.classify("Hello World")
+           detect_language("Hello World")
            mem_after = p.memory_info().rss
            self.mem_usage = mem_after - mem_before
-           logger.info('Default model for Langid loaded ...')
+           logger.info('Init test done...')
 
       def _detect_language(self, row):
               """Detects language for the given text"""
               text = row['Text']
               gt = row['language']
               start = time.time()
-              pred, _ = langid.classify(text)
+              pred = detect_language(text)
               end = time.time() - start
               match = gt == pred      
+              if not match:
+                  print(f"Mismatch: GT={gt}, Pred={pred}, Text={text}")
               return pd.Series([pred, end, match])
 
       def __call__(self) -> List[pd.DataFrame]:
           """ detects language for all the texts and calculates benchmark """
-          logger.info('Benchmark for Langid started ...')
+          logger.info('Benchmark for heuristic started ...')
           MB = 1024 * 1024
           df = pd.read_csv("data/dataset.csv")  
           df = df[df['language'].isin(lang_dict.keys())]
-          df['language'].apply(lambda x:lang_dict[x])
           df['language'] = df['language'].apply(lambda x:lang_dict[x])
           df[['pred_lang', 'time_taken', 'ismatch']] = df.progress_apply(self._detect_language ,axis=1)
           time_taken = df["time_taken"].to_list()
           correct_predictions = df[df['ismatch'] == True].shape[0]
           total_predictions = df.shape[0]
 
-          d = {"algorithm": "Langid",
+          d = {"algorithm": "heuristic",
                "mean": np.mean(time_taken),
                "max" : np.max(time_taken),
                "min" : np.min(time_taken),
@@ -61,10 +63,10 @@ class BenchmarkLangid():
                "accuracy":correct_predictions/ total_predictions
                }
           
-          df.to_csv("data/predictions_langid.csv", index = False)
+          df.to_csv("data/predictions_heuristic.csv", index = False)
           summary_df = pd.DataFrame([d]) 
 
           logger.info('Benchmark for Langid ended ...')
-          logger.info('See predictions_langid.csv files...')
+          logger.info('See predictions_heuristic.csv files...')
 
           return [summary_df]

@@ -25,11 +25,8 @@ A benchmark of off-the-shelf models that detects language in text - Contribution
 - Run on a fresh GCP `e2-medium (2 vCPU;	4GB Memory)`
 - Result Table:
 
-| algorithm    | mean   | max    | min    | median | mem          | accuracy |
-| ------------ | ------ | ------ | ------ | ------ | ------------ | -------- |
-| Langid       | 0.0004 | 0.0687 | 0.0001 | 0.0003 | 34.43 mb     | 0.9543   |
-| Fasttext_ftz | 0.0001 | 0.0013 | 0.0000 | 0.0001 | <b><span style="color:green"> 0.81 mb </span></b> | 0.9673   |
-| Fasttext_bin | 0.0001 | 0.0004 | 0.0000 | <b><span style="color:green"> 0.0001 </span></b> | 130.84 mb    | <b><span style="color:green"> 0.9751 </span></b> |
-| CLD3         | 0.0003 | 0.0024 | 0.0000 | 0.0002 | TBD          | 0.9557   |
-| CLD2         | 0.0000 | 0.0004 | 0.0000 | 0.0000 | TBD          | 0.9308   |
+| algorithm | mean   | max    | min    | median | mem     | accuracy |
+| --------- | ------ | ------ | ------ | ------ | ------- | -------- |
+| Langid    | 0.0001 | 0.0014 | 0.0000 | 0.0001 | 32.2 mb | 0.9853   |
+| heuristic | 0.0000 | 0.0003 | 0.0000 | 0.0000 | 0.0 mb  | 0.9870   |
 
